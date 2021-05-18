@@ -2,7 +2,6 @@ import React from "react";
 import Link from 'next/link'
 
 function SideMenu({ categories }) {
-  console.log("categories", categories);
   return (
     <div className="col-lg-3">
       <h1 className="my-4">Cinemas</h1>

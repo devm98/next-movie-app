@@ -1,14 +1,12 @@
-import { CATEGORIES, MOVIE_DATA } from "../resources/1_data";
 import axios from "axios";
+import { CATEGORIES } from "../resources/1_data";
 
-const BASE_URL = "http://localhost:3000";
-
-axios.defaults.baseURL = BASE_URL;
+const apiCaller = axios.create({
+  baseURL: "http://localhost:3000",
+});
 
 export const getMovies = () => {
-  axios.get("http://localhost:3000/api/movies").then((res) => {
-    console.log(" res.data", res.data);
-  });
+  return apiCaller.get("/api/movies").then((res) => res.data);
 };
 
 export const getCategories = () => {
@@ -18,20 +16,14 @@ export const getCategories = () => {
 };
 
 export const createMovie = (data) => {
-  return new Promise((resolve, reject) => {
-    MOVIE_DATA.push({ id: Math.random().toString(36).substr(2, 7), ...data });
-    setTimeout(() => {
-      resolve(MOVIE_DATA);
-    }, 0);
-  });
+  data.id = Math.random().toString(36).substr(2, 5);
+  return apiCaller.post("/api/movies", data);
 };
 
 export const getMovieById = (id) => {
-  return new Promise((resolve, reject) => {
-    const movie = MOVIE_DATA.find((movie) => movie.id === id);
+  return apiCaller.get(`/api/movies/${id}`).then((res) => res.data);
+};
 
-    setTimeout(() => {
-      resolve(movie);
-    }, 0);
-  });
+export const deleteMovieById = (id) => {
+  return apiCaller.delete(`/api/movies/${id}`).then((res) => res.data);
 };

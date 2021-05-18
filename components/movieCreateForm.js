@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createMovie } from "../actions";
+import { useRouter } from "next/router";
 
-const MovieCreateForm = ({ categories }) => {
+const MovieCreateForm = ({ categories, movie }) => {
   const closeBtn = useRef();
+  const router = useRouter();
 
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +25,6 @@ const MovieCreateForm = ({ categories }) => {
         }
       }
     }
-
     setForm({
       ...form,
       [name]: type === "select-multiple" ? optionsValue : value,
@@ -32,13 +33,21 @@ const MovieCreateForm = ({ categories }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createMovie(form)
-      .then((results) => {
-        console.log("res", results);
+    createMovie(form).then((res) => {
+      if (res.status === 200) {
+        router.push("/");
         closeBtn.current.click();
-      })
-      .then((err) => console.log("err", err));
+        setForm({ name: "", description: "", rating: "", genre: [], image: "", cover: "" });
+      }
+    });
   };
+
+  useEffect(() => {
+    setForm({
+      ...form,
+      ...movie,
+    });
+  }, [movie]);
 
   return (
     <form onSubmit={handleSubmit}>

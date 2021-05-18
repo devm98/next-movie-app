@@ -1,6 +1,6 @@
 import React from "react";
-import { getMovieById, getMovies } from "../../actions";
-import Link from 'next/link'
+import { getMovieById, getMovies } from "../../../actions";
+import Link from "next/link";
 
 function Movie({ movie }) {
   return (
@@ -33,6 +33,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const movie = await getMovieById(params.id);
+
   return {
     props: {
       movie,
